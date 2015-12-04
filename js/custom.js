@@ -1,7 +1,7 @@
 // load gallary as default
 $(document).ready(function () 
 {
-	$("#content").load("../CartPortfolio/html/gallary.html");
+	$("#content").load("html/gallary.html");
 
 	return false;
 });
