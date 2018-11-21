@@ -14,6 +14,14 @@ $("#work").click(function()
 	return false;
 });
 
+// // load capstone page when clicked
+// $("#capstone").click(function()
+// {
+// 	$("#content").load("html/capstone.html")
+
+// 	return false;
+// });
+
 // load resume when clicked
 $("#resume").click(function()
 {
