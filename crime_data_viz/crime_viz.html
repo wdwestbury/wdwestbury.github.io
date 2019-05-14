@@ -1,0 +1,250 @@
+<html>
+    <head>
+        <title>City of Madison Incidents of Interest</title>
+    <!-- libraries -->
+        <!-- leaflet -->
+        <link 
+            rel="stylesheet" 
+            href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+            integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+            crossorigin=""/>
+        <!-- leaflet clustermarker -->
+        <link 
+            rel="stylesheet"
+            href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css"/>
+        <!-- Font Awesome -->
+        <link 
+            rel="stylesheet" 
+            href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+        <!-- Bootstrap core CSS -->
+        <link 
+            href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" 
+            rel="stylesheet">
+        <!-- Material Design Bootstrap -->
+        <link 
+            href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.0/css/mdb.min.css" 
+            rel="stylesheet">
+        <link 
+            rel="stylesheet" 
+            type="text/css" 
+            href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+  
+           
+
+    <!-- custom css -->
+        <link 
+            rel="stylesheet"
+            href="css/custom.css"/>
+    </head>
+
+    <body>
+    <!-- begin content -->
+        <div class="container-fluid">
+            <div class="row">
+
+            <!-- top nav begin -->
+                <nav
+                    id="navbar" 
+                    class="navbar nav-fill w-100 navbar-expand-lg navbar-dark bg-dark">
+
+                <!-- title and link -->
+                    <a 
+                        class="navbar-brand"
+                        href="#">
+                        City of Madison Crime Data Viewer
+                    </a>
+
+                <!-- collapsable navbar button -->
+                    <button
+                        class="navbar-toggler"
+                        type="button"
+                        data-toggle="collapse"
+                        data-target="navbar_alt_markup"
+                        aria-controls="navbar_alt_markup"
+                        aria-expand="false"
+                        aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                <!-- navbar links -->
+                    <div 
+                        class="collapse navbar-collapse"
+                        id="navbar_alt_markup">
+                        <div class="navbar-nav">
+                            <a 
+                                class="nav-item nav-link active"
+                                href="#"
+                                data-toggle="modal" data-target="#exampleModal">
+                                About
+                            </a>
+                            <!-- <a 
+                                class="nav-item nav-link"
+                                href="#">
+                                Tutorial
+                            </a> -->
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        <!-- top nav end -->
+      
+        <!-- start about modal -->
+            <div 
+                class="modal fade" 
+                id="exampleModal" 
+                tabindex="-1" 
+                role="dialog" 
+                aria-labelledby="exampleModalLabel" 
+                aria-hidden="true">
+                <div 
+                    class="modal-dialog" 
+                    role="document">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 
+                            class="modal-title" 
+                            id="exampleModalLabel">
+                            About
+                        </h5>
+                        <button 
+                            type="button" 
+                            class="close" 
+                            data-dismiss="modal" 
+                            aria-label="Close">
+                            <span 
+                                aria-hidden="true">
+                                &times;
+                            </span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        This application visualizes police incidents of public interest in the City of Madison. The data comes from the City of Madison Open Data Portal and is a subset of 2,000 of the 12,156 records available.
+                        <br /><br />
+                        Incidents are categorized by the initial call/contact with police and are not adjusted by resolution. e.g. a traffic stop which results in a drug arrest is categorized as a traffic stop.
+                        <br /><br />
+                        Use the checkboxes to the left of the map to select a category of incidents to view. Individual incidents are shown as points and can be clicked on for further details. 
+                    </div>
+
+                    <div class="modal-footer">
+                        <button 
+                            type="button" 
+                            class="btn btn-secondary" 
+                            data-dismiss="modal">
+                            Close
+                        </button>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        <!-- start about modal -->
+
+        <!-- dashboard and map begin -->
+            <div 
+                class="row" 
+                id="dashboard_map_container">
+
+            <!-- dashboard -->
+                <div class="col-3">
+
+                    <div 
+                        id="crime_search_panel"
+                        class="card" 
+                        style="width: 100%">
+                        <h5 
+                            id="search_header"
+                            class="card-header card-header-text">
+                            Select a category of crime to view
+                        </h5>
+                        <div class="card-body">
+                            <!-- list of crime types -->
+                            <div id="filter_list">
+                                <!-- <div class="custom-control custom-checkbox super_custom_checkbox">
+                                    <input 
+                                        type="checkbox" 
+                                        class="custom-control-input" 
+                                        id="customCheck">
+                                    <label 
+                                        class="custom-control-label super_custom_input_item" 
+                                        for="customCheck">
+                                        Check this custom checkbox
+                                    </label>
+                                </div> -->
+                            </div>
+
+                            <div 
+                            id="search_footer"
+                            class="card-footer text-muted">
+                                <a 
+                                    href="#" 
+                                    class="btn btn-primary"
+                                    onclick="clear_selection()">
+                                    Clear Selection
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <table 
+                        id="data_table" 
+                        class="display" 
+                        width="100%">
+                    </table>
+
+                </div>
+
+            <!-- map -->
+                <div class="col">
+                    <div id="map"></div> 
+                </div>
+            </div>
+        <!-- dashboard and map end -->
+
+        </div>
+    <!-- end content -->
+
+    <!-- libraries -->
+        <!-- leaflet -->
+        <script 
+            src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+            integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+            crossorigin="">
+        </script>
+        <!-- leaflet cluster marker -->
+        <script 
+            src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js">
+        </script>
+        <!-- leaflet heatmap plugin -->
+        <script 
+            src="scripts/libs/leaflet.heat.js">
+        </script>
+        <!-- JQuery -->
+        <script 
+            type="text/javascript" 
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js">
+        </script>
+        <!-- Bootstrap tooltips -->
+        <script 
+            type="text/javascript" 
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js">
+        </script>
+        <!-- Bootstrap core JavaScript -->
+        <script 
+            type="text/javascript" 
+            src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js">
+        </script>
+        <!-- MDB core JavaScript -->
+        <script 
+            type="text/javascript" 
+            src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.0/js/mdb.min.js">
+        </script>
+         <script 
+            type="text/javascript" 
+            charset="utf8" 
+            src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js">
+        </script>
+    <!-- custom scripts -->
+        <script src="scripts/js/custom.js"></script>
+    </body>
+</html>

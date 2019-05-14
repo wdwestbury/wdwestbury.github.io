@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Green Bay Flood Viewer</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <!-- Custom Fonts -->
+    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+        <!-- jquery link I think leaflet dependency-->
+    <!-- <script type="text/javascript" src="lib/jquery-1.11.3.min.js"></script> -->
+
+
+
+    <!-- leaflet core and css -->
+    <script type="text/javascript" src="lib/leaflet/leaflet.js"></script>
+    <link rel="stylesheet" type="text/css" href="lib/leaflet/leaflet.css">
+
+    <!-- Custom CSS -->
+    <link href="css/custom.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav id="navBar" class="navbar navbar-dark bg-dark shadow rounded-bottom">
+        <a class="navbar-brand text-white">Green Bay Flood Viewer</a>
+        <form class="form-inline">
+            <button class="btn btn-sm btn-outline-secondary text-info" type="button" data-toggle='modal' data-target='#aboutModal'>About</button>
+        </form>
+    </nav>
+
+
+    <!-- About Modal -->
+    <div class="modal fade" id="aboutModal" tabindex="-1" role="dialog" aria-labelledby="aboutModal" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content bg-dark text-light">
+          <div class="modal-header bg-info">
+            <h3 class="modal-title font-italic font-weight-light" id="aboutLabel">About</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p class="mb-0">
+                The flood viewer was created to investigate where the Green Bay dike is most vulnerable to breaches and how those breaches might impact communities within the City. Water levels depicted in the map were chosen with the help of <a href="https://www.seagrant.wisc.edu/" target="_blank" class="text-info">University of Wisconsin Sea Grant Institue</a> and are based on historic water levels and historic storm surges. Flooded areas were extracted from elevation data and are an estimate of where flooding would occur.
+            </p>
+          </div>
+          <div class="modal-footer border-top-0">
+            <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+        <!-- map container -->
+        <div id="map">
+
+            <div id='stopPropPanel' class="ml-1">
+
+                <div class="card text-center bg-dark text-light shadow mt-1">
+                  <!-- <h6 class="card-header">Featured</h6> -->
+                  <div class="card-body p-2">
+                    <h6 class="card-title">Satellite Opacity</h6>
+                   <!--  <p class="card-text">Satellite</p> -->
+                    <input id="OPslide" type="range" class="slider-satelite">
+                  </div>
+                </div>
+
+
+                <!-- water level panel -->
+                <div class="card text-center bg-dark text-light shadow mt-1">
+                  <div class="card-body p-2">
+                    <h6 class="card-title">Choose Water Level</h6>
+                    <div id="floodHeader" class="floodLevelText"></div>
+                        <div class="d-flex mt-2">
+                            <div id="slider-holder">
+                            </div>
+                            <div class="ui-slider-labels">
+
+                                <div>
+                                     <button id="6" class="ui-slider-label btn btn-sm">591.00 ft</button>
+                                </div>    
+                                <div>
+                                     <button id="5" class="ui-slider-label btn btn-sm">582.79 ft</button>
+                                </div> 
+                                <div>
+                                     <button id="4" class="ui-slider-label btn btn-sm">583.81 ft</button>
+                                </div>  
+
+                                <div>
+                                     <button id="3" class="ui-slider-label btn btn-sm">584.97 ft</button>
+                                </div> 
+                                <div>
+                                     <button id="2" class="ui-slider-label btn btn-sm">583.81 ft</button>
+                                </div>
+
+                                <div>
+                                     <button id="1" class="ui-slider-label btn btn-sm">582.79 ft</button>
+                                </div>  
+                                <div>
+                                     <button id="0" class="ui-slider-label btn btn-sm">579.21 ft</button>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    <div>
+                        <button id="showInfoPanel" class="btn btn-sm btn-outline-secondary text-info">Display Statistics</button>
+                    </div>
+
+                  </div>
+                </div>
+
+
+                <!-- Overlay layer Panel -->
+                <div class="card text-center bg-dark text-light shadow mt-1">
+                  <div class="card-body p-2">
+                    <h6 class="card-title">Choose Data Overlay</h6>
+                    <div id= "dataOverlayButtons" class="list-group">
+                        <li class="list-group-item d-flex">
+                            <button id="breaks" type="button" class="btn btn-sm text-info">Dike Breaks</button>
+                            <button id="dikeBreakInfo" class="btn btn-sm text-info"><i class="fa fa-question-circle-o fa-lg white" aria-hidden="true"></i></button>
+                        </li>
+                        <li class="list-group-item d-flex">
+                            <button id="SOVI" type="button" class="btn btn-sm text-info">SoVI</button>
+                            <button id="soviInfo" class="btn btn-sm text-info"><i class="fa fa-question-circle-o fa-lg white" aria-hidden="true"></i></button>
+                        </li>
+                        <li class="list-group-item d-flex">
+                            <button id="BLS"  type="button" class="btn btn-sm text-info">Business</button>
+                            <button id="blsInfo" class="btn btn-sm text-info"><i class="fa fa-question-circle-o fa-lg white" aria-hidden="true"></i></button>
+                        </li>
+                        <li class="list-group-item d-flex">
+                            <button id="affectedPop" type="button" class="btn btn-sm text-info">People Affected</button>
+                            <button id="populationInfo" class="btn btn-sm text-info"><i class="fa fa-question-circle-o fa-lg white" aria-hidden="true"></i></button>
+                        </li>
+                        <li class="list-group-item d-flex">
+                            <button id="propertyLost"  type="button" class="btn btn-sm text-info">Property Lost</button>
+                            <button id="propertyLostInfo" class="btn btn-sm text-info"><i class="fa fa-question-circle-o fa-lg white" aria-hidden="true"></i></button>
+                        </li>
+                        <li class="list-group-item d-flex">
+                            <button id="medianIncome" type="button" class="btn btn-sm text-info">Median Income</button>
+                            <button id="incomeInfo" class="btn btn-sm text-info"><i class="fa fa-question-circle-o fa-lg white" aria-hidden="true"></i></button>
+                        </li>
+                        <li class="list-group-item d-flex">
+                            <button id="turnOnFloods"  type="button" class="btn btn-sm text-info">Flooding</button>
+                        </li>
+                        <li class="list-group-item d-flex">
+                            <button id="reset" type="button" class="btn btn-sm text-info">Reset</button>
+                        </li>
+                    </div>
+                  </div>
+                </div>
+
+
+                <div id="waterLevelLegend"></div>
+            </div>
+
+            <!-- info panel -->
+            <div id= "infoPanel" class="card shadow" style="width: 18rem;">
+              <div class="card-header">
+                <h6 class="d-inline"> Depth:  <span id="waterLevel"></span></h6>
+                <!-- <button id="hideInfoPanel" type="button" class="close">×</button>  -->
+                <button id="hideInfoPanel" type="button" class="close mt-n1" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">Number of Dike Breaks: <span id="numberOfDikeBreaks"></span></li>
+                <li class="list-group-item">Total Flooded Area: <span id="totalFloodedArea"></span></li>
+                <li class="list-group-item">Max Property Losses: <span id="maxPropertyLosses"></span></li>
+                <li class="list-group-item">Number of People Affected: <span id="peopleAffected"></span></li>
+              </ul>
+            </div>
+
+
+            <!-- legend -->
+            <div id="legendPanel" class="card shadow" style="width: 18rem;">
+              <div class="card-header">
+                <h6 class="d-inline"><span id="legendHeader"></span></h6>
+                <!-- <button id="hideInfoPanel" type="button" class="close">×</button>  -->
+                <button id="legendClose" type="button" class="close mt-n1" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+                <div class="card-body p-2">
+                    <p id="legendText" class="mb-1"></p>
+                    <div id='colorLegend'>
+                        <div id='replace'></div>
+                    </div>
+                </div>
+            </div>
+
+        <!-- end map -->
+
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+
+    <script type="text/javascript" src="lib/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
+
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/d3-simple-slider"></script>
+
+    <!-- <script type="text/javascript" src="js/tutorials.js"></script> -->
+    <script type="text/javascript" src="js/custom.js"></script>
+<!-- body end-->
+</body>
+
+</html>

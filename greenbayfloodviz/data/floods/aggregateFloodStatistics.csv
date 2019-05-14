@@ -1,0 +1,8 @@
+waterLevel,numDikeBreaks,floodedMeters,floodArea,maxPropLosses,numPeopleAffected
+579.21 feet,0 breaks,"639,070.82",0.25 square miles,"$ 6,459,948",48 people
+582.79 feet,2 breaks,"10,855,064.25",4.19 square miles,"$ 30,447,060",822 people
+583.81 feet,30 breaks,"16,003,881.7",6.18 square miles,"$ 48,343,869","1,322 people"
+584.97 feet,52 breaks,"24,508,494.66",9.46 square miles,"$ 268,624,177","5,522 people"
+586.75 feet,77 breaks,"34,872,961.45",13.46 square miles,"$ 509,858,082","10,076 people"
+588.20 feet,93 breaks,"44,789,184.03",17.29 square miles,"$ 734,419,980","14,232 people"
+591.00 feet,95 breaks,"63,267,334.54",24.43 square miles,"$ 1,280,683,463","25,275 people"

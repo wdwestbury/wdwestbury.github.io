@@ -1,0 +1,58 @@
+[
+  {
+    "waterLevel": "579.21 feet",
+    "numDikeBreaks": "0 breaks",
+    "floodedMeters": "639,070.82",
+    "floodArea": "0.25 square miles",
+    "maxPropLosses": "$ 6,459,948",
+    "numPeopleAffected": "48 people"
+  },
+  {
+    "waterLevel": "582.79 feet",
+    "numDikeBreaks": "2 breaks",
+    "floodedMeters": "10,855,064.25",
+    "floodArea": "4.19 square miles",
+    "maxPropLosses": "$ 30,447,060",
+    "numPeopleAffected": "822 people"
+  },
+  {
+    "waterLevel": "583.81 feet",
+    "numDikeBreaks": "30 breaks",
+    "floodedMeters": "16,003,881.7",
+    "floodArea": "6.18 square miles",
+    "maxPropLosses": "$ 48,343,869",
+    "numPeopleAffected": "1,322 people"
+  },
+  {
+    "waterLevel": "584.97 feet",
+    "numDikeBreaks": "52 breaks",
+    "floodedMeters": "24,508,494.66",
+    "floodArea": "9.46 square miles",
+    "maxPropLosses": "$ 268,624,177",
+    "numPeopleAffected": "5,522 people"
+  },
+  {
+    "waterLevel": "586.75 feet",
+    "numDikeBreaks": "77 breaks",
+    "floodedMeters": "34,872,961.45",
+    "floodArea": "13.46 square miles",
+    "maxPropLosses": "$ 509,858,082",
+    "numPeopleAffected": "10,076 people"
+  },
+  {
+    "waterLevel": "588.20 feet",
+    "numDikeBreaks": "93 breaks",
+    "floodedMeters": "44,789,184.03",
+    "floodArea": "17.29 square miles",
+    "maxPropLosses": "$ 734,419,980",
+    "numPeopleAffected": "14,232 people"
+  },
+  {
+    "waterLevel": "591.00 feet",
+    "numDikeBreaks": "95 breaks",
+    "floodedMeters": "63,267,334.54",
+    "floodArea": "24.43 square miles",
+    "maxPropLosses": "$ 1,280,683,463",
+    "numPeopleAffected": "25,275 people"
+  }
+]

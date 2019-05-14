@@ -1,0 +1,168 @@
+--create a template of the parcel data for each level
+create table level1_template as
+select
+geom,
+shape_area,
+propclass,
+geoid10,
+employment,
+geoid10_1,
+sovi_3cl,
+sovi_5cl,
+impvalue
+from level1parcels
+
+
+
+--calculate max property losses and area flooded
+--run the following updates as a block
+
+	--add in a field for max property losses
+	alter table level1_template add column max_property_loss bigint;
+
+
+	--add in an area field to compare old values
+	alter table level1_template add column old_area double precision;
+	update level1_template set old_area = shape_area;
+
+
+	--add in a new field for flooded area in square meters
+	alter table level1_template add column flooded_area numeric;
+
+
+	--add in a new field for the total area of residential parcels square meters
+	alter table level1_template add column flooded_area_residential real;
+
+
+	--add in field for percent flooded
+	alter table level1_template add column percent_flooded real;
+
+
+	--assign a value to the geometry
+	select updategeometrysrid('level1_template','geom',4326);
+
+
+	--update the new area area field
+	update level1_template 
+	set flooded_area = 
+	st_area(st_transform(geom,3070));
+
+	--update the flooded residential field
+	update level1_template
+	set flooded_area_residential =
+	st_area(st_transform(geom,3070))
+	where 
+	propclass = 'G1' 
+	or propclass = 'G1, G5' 
+	or propclass = 'G1, G4' 
+	or propclass = 'G1, G4, G5' ;
+
+
+	--set the flooded area
+	update level1_template set flooded_area = round(flooded_area,2);
+
+
+	--calculate and set the percent of area flooded
+	update level1_template set percent_flooded = flooded_area/old_area;
+
+
+	--calculate and set the maximum property losses
+	update level1_template set max_property_loss = percent_flooded * impvalue;
+
+-- end of block
+
+
+
+--select the highest implandval for duplicate parcels and then remove any other duplicate parcels
+--create a table consisting of geometries with max implandvals
+create table level1nonduplicates as select *
+from
+(select *,row_number() over (partition by geom order by impvalue desc) as rn
+	from level1_template
+)as a
+where a.rn = 1
+
+
+--check to make sure no duplicates remain
+
+
+
+--create table of aggregated flooded area and aggregated max property loss
+create table level1blockgroupstats as 
+select geoid10,
+sum(old_area) total_parcel_area,
+sum(flooded_area) flooded_parcel_area,
+sum(flooded_area_residential) flooded_residential,
+sum(max_property_loss) property_loss 
+from level1nonduplicates group by geoid10
+
+
+
+--create a percent flooded for the residential area of the block group that is flooded
+alter table level1blockgroupstats
+add column percent_parcels_flooded_residential numeric
+
+
+
+--calculate the percentage of the block group that is flooded
+update level1blockgroupstats
+set percent_parcels_flooded_residential = flooded_residential/flooded_parcel_area;
+
+
+
+
+--join census data to the group stats to get population values for each block group
+--note, we lose 1 record here for the blank column that is not included
+create table level1blockgroup as 
+select
+a.geoid10,
+a.flooded_parcel_area,
+a.total_parcel_area,
+a.flooded_residential,
+a.percent_parcels_flooded_residential,
+a.property_loss max_property_losses,
+b.total_population,
+b.median_income
+from level1blockgroupstats a
+inner join acs2014_5 b
+using(geoid10)
+
+
+
+--create a column for the total folks affected
+alter table level1blockgroup
+add column total_people_affected integer;
+
+
+
+--calculate the total number of people affected by the flooding per block group
+update level1blockgroup 
+set total_people_affected = percent_parcels_flooded_residential * total_population;
+
+
+
+
+--create a final table which includes all geometries in the block group layer and data
+create table floodlevel1data as
+select 
+a.geoid10,
+a.employment,
+a.geoid10_1,
+a.sovi_3cl,
+a.sovi_5cl,
+b.flooded_parcel_area,
+b.flooded_residential,
+b.percent_parcels_flooded_residential,
+b.total_parcel_area,
+b.total_population,
+b.total_people_affected,
+b.max_property_losses,
+b.median_income,
+a.geom
+from blssovifloodlevel1 a
+left join level1blockgroup b
+using(geoid10);
+
+
+--create a shapefile of the data
+pgsql2shp -f C:\sandbox\FinalProject\data\floodlevel7data.shp -h localhost -u postgres -P 123 floodViewer "select * from floodlevel7data"

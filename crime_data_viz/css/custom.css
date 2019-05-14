@@ -1,0 +1,54 @@
+#dashboard_map_container {
+    background-color: #484d53;
+    color: white;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+#map { 
+    height: 90%;
+    border-radius: 5px;
+}
+
+#filter_list {
+    /* max-height: 300px; */
+    overflow: auto;
+}
+
+.card-header-text {
+    color: black;
+}
+
+/* custom inputs */
+.super_custom_checkbox {
+    padding-left: 38px !important;
+    background-color: white;
+    color: black;
+    font-weight: 500;
+    height: 40px;
+}
+
+.super_custom_input_item {
+    position: absolute !important;
+    top: 8px;
+}
+
+/* popup  */
+
+.popup-label {
+    font-weight: 700;
+}
+
+.popup-details {
+    padding-left: 25px;
+}
+
+.incident-details {
+    max-height: 200px;
+    overflow: auto; 
+}
+
+.custom-cluster-icon {
+    color:black
+}
+
